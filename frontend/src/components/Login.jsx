@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,7 +10,7 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);  // Only need to update context
   const navigate = useNavigate();
   const emailRef = useRef(null);
 
@@ -20,12 +21,13 @@ const Login = () => {
     }
   }, []);
 
-  // Redirect to the home page if the user is already logged in
+  // Redirect to dashboard if already logged in
   useEffect(() => {
-    if (auth.token) {
-      navigate('/');
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('dashboard');
     }
-  }, [auth, navigate]);
+  }, [navigate]);
 
   // Handle login form submission
   const handleLogin = async (e) => {
@@ -34,10 +36,16 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/login', { email, password });
       const { token, user } = response.data;
+
+      // Store token and user data in localStorage
       localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Set auth context state (use this for in-app state management)
       setAuth({ token, user });
+
       setSuccess(true);
-      navigate('/');
+      navigate('/dashboard');  // Redirect to the dashboard after login
     } catch (error) {
       setError(error.response?.data?.error || 'An unexpected error occurred');
     } finally {
@@ -78,15 +86,13 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-blue-500 text-white py-2 rounded-md shadow-md ${
-              loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
-            }`}
+            className={`w-full bg-blue-500 text-white py-2 rounded-md shadow-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}`}
           >
             {loading ? 'Loading...' : 'Login'}
           </button>
         </form>
         <div className="text-center mt-4 text-sm text-gray-500">
-          Don't have an account? <a href="/register" className="text-blue-500">Register here</a>
+          Don't have an account? <Link to="/register" className="text-blue-500">Register here</Link>
         </div>
       </div>
     </div>
