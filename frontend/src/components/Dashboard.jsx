@@ -44,7 +44,18 @@ const Dashboard = () => {
     return <div className="text-red-500">{error}</div>;
   }
   //logout clear local storage
-  
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setAuth({ token: null, user: null });
+        navigate('/login'); // Redirect to login page after logout
+    };
+    // You can add a button to trigger the logout function
+
+  // logout handler
+
+
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -54,6 +65,11 @@ const Dashboard = () => {
           <div>
             <h3 className="text-lg font-semibold">Welcome, {auth.user.name}!</h3>
             <p>Email: {auth.user.email}</p>
+            {/* logout */}
+            <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded mt-4">Logout</button>
+            
+            {/* Add more user details or functionality here */}
+        
             {/* Display additional user details here */}
           </div>
         ) : (

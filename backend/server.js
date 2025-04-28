@@ -129,7 +129,7 @@ app.get('/user', authenticateToken, (req, res) => {
 });
 
 // Get All Users
-app.get('/users', (req, res) => {
+app.get('/users',authenticateToken, (req, res) => {
   const sql = 'SELECT * FROM users';
   db.query(sql, (err, result) => {
     if (err) {
