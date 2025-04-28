@@ -7,6 +7,7 @@ const dbConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 };
+function db(){
 const db = mysql.createConnection(dbConfig);
 const dba = mysql.createPool(dbConfig);
 const dbc = mysql.createPool({
@@ -27,5 +28,5 @@ db.connect((err) => {
   console.log('Connected to the database');
 });
 //db connection end
-
+}
 
