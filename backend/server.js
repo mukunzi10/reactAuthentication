@@ -160,6 +160,20 @@ app.get('/users/:id', (req, res) => {
   });
 });
 
+app.post('/api/students', (req, res) => {
+  const { name, email, age, grade } = req.body;
+  const sql = 'INSERT INTO students (name, email, age, grade) VALUES (?, ?, ?, ?)';
+  db.query(sql, [name, email, age, grade], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ error: 'Failed to add student', details: err.message });
+    } else {
+      res.status(201).json({ id: result.insertId, name, email, age, grade });
+    }
+  });
+});
+
+
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err.stack);
@@ -167,17 +181,18 @@ app.use((err, req, res, next) => {
 });
 
 //add Students
-app.post('/api/students', (req, res) => {
-  const { name, email, age, grade } = req.body;
-  const query = 'INSERT INTO students (name, email, age, grade) VALUES (?, ?, ?, ?)';
-  db.query(query, [name, email, age, grade], (err, result) => {
-    if (err) {
-      res.status(500).json({ error: 'Failed to add student' });
-    } else {
-      res.status(201).json({ id: result.insertId, name, email, age, grade });
-    }
-  });
-});
+// app.post('/api/students', (req, res) => {
+//   const { name, email, age, grade } = req.body;
+//   const query = 'INSERT INTO students (name, email, age, grade) VALUES (?, ?, ?, ?)';
+//   db.query(query, [name, email, age, grade], (err, result) => {
+//     if (err) {
+//       res.status(500).json({ error: 'Failed to add student' });
+//     } else {
+//       res.status(201).json({ id: result.insertId, name, email, age, grade });
+//     }
+//   });
+// });
+
 
 // Start Server
 app.listen(PORT, () => {

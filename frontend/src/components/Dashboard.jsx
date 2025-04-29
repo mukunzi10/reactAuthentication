@@ -101,7 +101,8 @@ const Dashboard = () => {
           {showStudents && (
             <div className="pl-4 mt-2 space-y-2 text-sm">
               <a href="/students" className="block hover:bg-blue-700 p-2 rounded">View Students</a>
-              <a href="/students/add" className="block hover:bg-blue-700 p-2 rounded">Add Student</a>
+
+              <a href="/add-student" className="block hover:bg-blue-700 p-2 rounded">Add Student</a>
               <a href="/students/reports" className="block hover:bg-blue-700 p-2 rounded">Student Reports</a>
             </div>
           )}
