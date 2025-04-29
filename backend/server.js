@@ -140,6 +140,7 @@ app.get('/users',authenticateToken, (req, res) => {
   });
 });
 
+
 // Get User by ID
 app.get('/users/:id', (req, res) => {
   const { id } = req.params;
@@ -163,6 +164,19 @@ app.get('/users/:id', (req, res) => {
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
+});
+
+//add Students
+app.post('/api/students', (req, res) => {
+  const { name, email, age, grade } = req.body;
+  const query = 'INSERT INTO students (name, email, age, grade) VALUES (?, ?, ?, ?)';
+  db.query(query, [name, email, age, grade], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to add student' });
+    } else {
+      res.status(201).json({ id: result.insertId, name, email, age, grade });
+    }
+  });
 });
 
 // Start Server
