@@ -160,7 +160,7 @@ app.get('/users/:id', (req, res) => {
   });
 });
 
-app.post('/api/students', (req, res) => {
+app.post('/api/students',authenticateToken, (req, res) => {
   const { name, email, age, grade } = req.body;
   const sql = 'INSERT INTO students (name, email, age, grade) VALUES (?, ?, ?, ?)';
   db.query(sql, [name, email, age, grade], (err, result) => {
@@ -168,12 +168,30 @@ app.post('/api/students', (req, res) => {
       console.error('Database error:', err);
       res.status(500).json({ error: 'Failed to add student', details: err.message });
     } else {
-      res.status(201).json({ id: result.insertId, name, email, age, grade });
+      res.status(201).json({ id: result.insertId, name, email, age, grade,
+        message:"Data successfull registered"
+       });
     }
   });
 });
 
+//Student 
+app.get('/api/students',(req,res)=>{
+  const sql="SELECT * FROM students";
+  db.query(sql,(err,result)=>{
+    if (err) {
+      console.error('Error fetching student:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
 
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    res.json(result);
+  })
+
+});
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err.stack);

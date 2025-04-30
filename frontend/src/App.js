@@ -3,6 +3,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { BrowserRouter, Routes,Route } from "react-router-dom";
 import AddStudent from './components/AddStudent';
+import ViewStudent from "./components/ViewStudent";
+
 
 export default function App() {
   return (
@@ -14,6 +16,7 @@ export default function App() {
         <Route path="dashboard" element={<Dashboard/>}/>
         {/* <Route path="addstudent" element={<AddStudent/>}/> */}
         <Route path="/add-student" element={<AddStudent />} />
+        <Route path="/students" element={<ViewStudent />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
       
